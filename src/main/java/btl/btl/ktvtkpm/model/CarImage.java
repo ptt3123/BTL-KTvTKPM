@@ -40,4 +40,3 @@ public class CarImage implements Serializable {
         return "CarImage{id=" + id + ", link='" + link + "', detail='" + detail + "', carId=" + carId + '}';
     }
 }
-
