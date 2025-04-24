@@ -17,7 +17,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("register.jsp").forward(request, response);
+        request.getRequestDispatcher("/login.jsp").forward(request, response);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class LoginServlet extends HttpServlet {
         // Kiểm tra dữ liệu không rỗng
         if (username == null || password == null || username.isEmpty() || password.isEmpty()) {
             request.setAttribute("errorMessage", "Tên đăng nhập và mật khẩu không được để trống!");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            request.getRequestDispatcher("/login.jsp").forward(request, response);
             return;
         }
         
@@ -42,7 +42,7 @@ public class LoginServlet extends HttpServlet {
             
             if((user == null) || (!PasswordUtil.checkPassword(password, user.getPassword()))){
                 request.setAttribute("errorMessage", "Thông tin đăng nhập không chính xác!");
-                request.getRequestDispatcher("login.jsp").forward(request, response);
+                request.getRequestDispatcher("/login.jsp").forward(request, response);
                 
             } else {
                 // Lưu thông tin 
@@ -50,18 +50,18 @@ public class LoginServlet extends HttpServlet {
                 session.setAttribute("uid", user.getId());
                 boolean ist = user.isIsStaff();
                 session.setAttribute("ist", ist);
-
+                
                 // Chuyển hướng đến trang chủ hoặc trang dashboard
                 if (!ist) {
-                    response.sendRedirect("index.jsp");
+                    response.sendRedirect(request.getContextPath() + "/index.jsp");
                 } else {
-                    response.sendRedirect("dashboard.jsp");
+                    response.sendRedirect(request.getContextPath() + "/dashboard.jsp");
                 }
             }
             
         } catch (Exception e) {
             request.setAttribute("errorMessage", "Đã có lỗi xảy ra. Hãy thử lại sau!");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            request.getRequestDispatcher("/login.jsp").forward(request, response);
             
         }
     }

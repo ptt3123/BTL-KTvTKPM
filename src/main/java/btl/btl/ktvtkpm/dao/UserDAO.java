@@ -91,14 +91,8 @@ public class UserDAO extends DAO{
             
             if (rs.next()) {
                 user = new User();
-                user.setUsername(rs.getString("username"));
+                user.setId(rs.getInt("id"));
                 user.setPassword(rs.getString("password"));
-                user.setName(rs.getString("name"));
-                user.setFamilyName(rs.getString("familyName"));
-                user.setPhoneNumber(rs.getString("phoneNumber"));
-                user.setAddress(rs.getString("address"));
-                user.setAvatar(rs.getString("avatar"));
-                user.setDateOfBirth(rs.getDate("dateOfBirth"));
                 user.setIsStaff(rs.getBoolean("isStaff"));
             }
             

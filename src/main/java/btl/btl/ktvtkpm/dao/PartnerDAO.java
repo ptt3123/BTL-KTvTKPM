@@ -107,6 +107,25 @@ public class PartnerDAO extends DAO{
         partner.setDetail(rs.getString("detail"));
         return partner;
     }
+    
+    public int readCountOfPartner() throws SQLException{
+        int count = 0;
+        String sql = "SELECT COUNT(*) FROM partner";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Database Error: " + e.getMessage());
+            throw new SQLException(e);
+        }
+
+        return count;
+    }
 
 }
 
