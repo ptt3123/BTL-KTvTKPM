@@ -30,7 +30,7 @@ public class RegisterServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("register.jsp").forward(request, response);
+        request.getRequestDispatcher("/register.jsp").forward(request, response);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class RegisterServlet extends HttpServlet {
             String fileExtension = FileUploadUtil.getFileExtension(filePart);
             if (!FileUploadUtil.isValidFileType(fileExtension)) {
                 request.setAttribute("errorMessage", "Định dạng file không hợp lệ!");
-                request.getRequestDispatcher("register.jsp").forward(request, response);
+                request.getRequestDispatcher("/register.jsp").forward(request, response);
             }
             
             avatarPath = UUID.randomUUID().toString() + fileExtension;
@@ -87,7 +87,7 @@ public class RegisterServlet extends HttpServlet {
                 errorMessage.append("- ").append(violation.getMessage()).append("<br>");
             }
             request.setAttribute("errorMessage", errorMessage.toString());
-            request.getRequestDispatcher("register.jsp").forward(request, response);
+            request.getRequestDispatcher("/register.jsp").forward(request, response);
             return;
         }
         
@@ -104,11 +104,11 @@ public class RegisterServlet extends HttpServlet {
             
         } catch (SQLIntegrityConstraintViolationException e) {
             request.setAttribute("errorMessage", e.getMessage());
-            request.getRequestDispatcher("register.jsp").forward(request, response);
+            request.getRequestDispatcher("/register.jsp").forward(request, response);
             
         } catch (Exception e){
             request.setAttribute("errorMessage", "Đăng ký thất bại, thử lại!");
-            request.getRequestDispatcher("register.jsp").forward(request, response);
+            request.getRequestDispatcher("/register.jsp").forward(request, response);
         }
     }
 
