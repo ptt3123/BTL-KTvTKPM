@@ -23,13 +23,12 @@ public class AuthenticationFilter implements Filter {
 
         boolean isStaff = session != null && 
                 session.getAttribute("uid") != null && 
-                session.getAttribute("ist") == "true";
-        
-
+                "true".equals(String.valueOf(session.getAttribute("ist")));
+         
         if (isStaff) {
             chain.doFilter(req, res);
         } else {
-            response.sendRedirect("login.jsp");
+            response.sendRedirect(request.getContextPath() + "/login");
         }
     }
 }
