@@ -126,6 +126,47 @@ public class PartnerDAO extends DAO{
 
         return count;
     }
+    
+    public List<Partner> readPartnerByName(String keyword, int page, int pageSize) throws SQLException {
+        List<Partner> partners = new ArrayList<>();
+        String sql = "SELECT * FROM partner WHERE LOWER(name) LIKE ? LIMIT ? OFFSET ?";
 
+        try (PreparedStatement stmt = this.connection.prepareStatement(sql)) {
+            stmt.setString(1, "%" + keyword.toLowerCase() + "%");
+            stmt.setInt(2, pageSize);
+            stmt.setInt(3, (page - 1) * pageSize);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    partners.add(mapResultSetToPartner(rs));
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Database Error!: " + e);
+            throw new SQLException(e);
+        }
+
+        return partners;
+    }
+    
+    public int readCountOfPartnerByName(String keyword) throws SQLException{
+        int count = 0;
+        String sql = "SELECT COUNT(*) FROM partner WHERE LOWER(name) LIKE ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, "%" + keyword.toLowerCase() + "%");
+            
+            ResultSet rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Database Error: " + e.getMessage());
+            throw new SQLException(e);
+        }
+
+        return count;
+    }
 }
-

@@ -10,7 +10,7 @@ import java.sql.Date;
 import java.sql.Types;
 
 public class PartnerStatisticsDAO extends DAO {
-    public List<PartnerStatistics> readList(Date fromDate, Date toDate, int page, int pageSize) throws SQLException {
+    public List<PartnerStatistics> readList(String keyword, Date fromDate, Date toDate, int page, int pageSize) throws SQLException {
         List<PartnerStatistics> list = new ArrayList<>(); 
         String sql = "SELECT p.*, COALESCE(t1.revenue, 0) AS revenue\n" +
                         "FROM partner p\n" +
@@ -28,6 +28,7 @@ public class PartnerStatisticsDAO extends DAO {
                         "    ) t ON t.carId = c.id\n" +
                         "    GROUP BY c.partnerId\n" +
                         ") t1 ON t1.partnerId = p.id\n" +
+                        "WHERE LOWER(name) LIKE ?\n" +
                         "ORDER BY revenue DESC\n" +
                         "LIMIT ? OFFSET ?;";
         
@@ -49,8 +50,10 @@ public class PartnerStatisticsDAO extends DAO {
                 stmt.setNull(4, Types.DATE);
             }
             
-            stmt.setInt(5, pageSize);
-            stmt.setInt(6, (page - 1) * pageSize);
+            stmt.setString(5, "%" + keyword.toLowerCase() + "%");
+            
+            stmt.setInt(6, pageSize);
+            stmt.setInt(7, (page - 1) * pageSize);
 
             ResultSet rs = stmt.executeQuery();
 

@@ -80,5 +80,24 @@ public class PartnerPaymentDAO extends DAO {
         
         return false;
     }
+    
+    public boolean isPartnerPaymentThisMonth(int partnerId) {
+        String sql = "SELECT id FROM partner_payment " +
+                     "WHERE partnerId = ? " +
+                     "AND MONTH(createDate) = MONTH(CURRENT_DATE()) " +
+                     "AND YEAR(createDate) = YEAR(CURRENT_DATE())";
+
+        try (PreparedStatement stmt = this.connection.prepareStatement(sql)) {
+            stmt.setInt(1, partnerId);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next(); // Có ít nhất 1 dòng => đã có thanh toán
+            
+        } catch (SQLException e) {
+            System.out.println("Database Error!: " + e);
+        }
+
+        return false;
+    }
+
 }
 
